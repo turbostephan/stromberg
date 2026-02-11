@@ -1,9 +1,76 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>Current Date and Time</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STROMBERG QUIZ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .question-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+        .confetti {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.8;
+            top: 80%;
+            left: 0;
+            width: 100%;
+            height: 0;
+            z-index: 9999;
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Current Date and Time</h1>
-  <p>2026-02-11 13:18:54</p>
+    <h1>STROMBERG QUIZ</h1>
+    <div class="confetti" id="confetti"></div>
+    <div id="questions">
+        <!-- Add your shuffled questions here -->
+        <div class="question-card">Question 1: What is your favorite color?</div>
+        <div class="question-card">Question 2: What is your favorite animal?</div>
+        <!-- Repeat for all 25 questions -->
+    </div>
+    <footer>
+        <p>Created by Stephan Biermann</p>
+    </footer>
+    <script>
+        // Confetti animation script
+        function createConfetti() {
+            const colors = ['#ff0', '#0f0', '#00f', '#f00', '#ff00ff', '#00ffff'];
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'absolute';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.opacity = Math.random();
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = Math.random() * window.innerHeight + 'px';
+                document.getElementById('confetti').appendChild(confetti);
+            }
+        }
+        window.onload = function() {
+            createConfetti();
+        };
+    </script>
 </body>
 </html>
