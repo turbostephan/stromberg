@@ -1,9 +1,550 @@
-<html>
+<!DOCTYPE html>
+<html lang="de">
 <head>
-    <title>Current Date and Time</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Stromberg Quiz • Capitol Versicherung</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root{
+      --stromberg-red:#d40000;
+      --capitol-blue:#2c6fa6;
+      --capitol-teal:#2e8b8b;
+      --paper:#f6f2e8;
+      --ink:#1f1f1f;
+      --muted:#6b6b6b;
+    }
+
+    body{
+      font-family:'Work Sans',sans-serif;
+      background: radial-gradient(1200px 700px at 20% 0%, #ffffff 0%, var(--paper) 50%, #e9efe7 100%);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x:hidden;
+      position:relative;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    /* Papier/Scanner-Textur */
+    body::after{
+      content:"";
+      position: fixed;
+      inset: 0;
+      pointer-events:none;
+      z-index: 1;
+      background:
+        repeating-linear-gradient(0deg, rgba(0,0,0,.03) 0px, rgba(0,0,0,.03) 1px, transparent 1px, transparent 3px),
+        radial-gradient(1200px 800px at 50% 20%, rgba(0,0,0,.08), transparent 60%);
+      mix-blend-mode: multiply;
+      opacity: .35;
+    }
+
+    /* Portrait / Mobile-first */
+    .container{
+      width: min(540px, 100%);
+      margin: 0 auto;
+      padding: 14px 14px 26px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .header{
+      text-align:center;
+      margin-bottom: 12px;
+      display:grid;
+      gap: 6px;
+      justify-items:center;
+    }
+
+    .title{
+      font-family:'Bebas Neue', cursive;
+      font-size: 3.0rem;
+      letter-spacing: 4px;
+      color: var(--ink);
+      display:inline-block;
+      padding-bottom: 10px;
+      border-bottom: 10px solid var(--stromberg-red);
+      line-height: .95;
+      text-transform: uppercase;
+    }
+
+    .subtitle{
+      font-size: .82rem;
+      letter-spacing: 1.4px;
+      color: #2b2b2b;
+      opacity: .85;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .quiz-card{
+      background: linear-gradient(180deg, #fff 0%, var(--paper) 100%);
+      border: 2px solid rgba(0,0,0,.18);
+      border-radius: 14px;
+      padding: 18px 18px 62px; /* bottom space to avoid watermark clipping */
+      box-shadow: 0 18px 40px rgba(0,0,0,.18), 0 2px 0 rgba(0,0,0,.10) inset;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quiz-card::before{
+      content:'';
+      position:absolute;
+      top:0; left:0; right:0;
+      height: 10px;
+      background: linear-gradient(90deg, var(--capitol-blue), var(--capitol-teal));
+      border-radius: 14px 14px 0 0;
+      pointer-events:none;
+    }
+
+    .progress-bar{
+      width: 100%;
+      height: 10px;
+      background: rgba(0,0,0,.06);
+      border: 1px solid rgba(0,0,0,.25);
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 8px 0 14px;
+    }
+
+    .progress-fill{
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--capitol-blue), var(--capitol-teal));
+      transition: width 0.35s ease;
+      border-radius: 6px;
+    }
+
+    .top-row{
+      display:flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .question-counter, .score-mini{
+      font-size: .82rem;
+      color: rgba(0,0,0,.70);
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .question{
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--ink);
+      margin: 10px 0 14px;
+      line-height: 1.35;
+    }
+
+    .answers{
+      display: grid;
+      gap: 10px;
+    }
+
+    .answer-btn{
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(0,0,0,.25);
+      padding: 16px 44px 16px 16px;
+      border-radius: 12px;
+      color: var(--ink);
+      font-size: 1.0rem;
+      font-weight: 750;
+      cursor: pointer;
+      text-align: left;
+      transition: transform .16s ease, background .16s ease, border-color .16s ease, box-shadow .16s ease;
+      box-shadow: 0 1px 0 rgba(0,0,0,.10);
+      position: relative;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .answer-btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.95); }
+
+    /* Auswahl: sehr deutlich, aber wechselbar */
+    .answer-btn.selected{
+      background: rgba(44,111,166,.12);
+      border-color: rgba(44,111,166,.98);
+      box-shadow: 0 0 0 4px rgba(44,111,166,.20), 0 10px 22px rgba(0,0,0,.14);
+      transform: translateY(-1px);
+    }
+    .answer-btn.selected::after{
+      content: "✓";
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #fff;
+      background: linear-gradient(135deg, var(--capitol-blue), var(--capitol-teal));
+      box-shadow: 0 6px 16px rgba(0,0,0,.18);
+    }
+
+    .next-btn, .restart-btn{
+      margin-top: 14px;
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 1rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      color: #fff;
+      transition: transform .16s ease, opacity .16s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .next-btn{ background: linear-gradient(135deg, var(--capitol-blue), var(--capitol-teal)); }
+    .restart-btn{ background: linear-gradient(135deg, var(--stromberg-red), #8b0000); }
+    .next-btn:hover, .restart-btn:hover{ transform: translateY(-2px); }
+    .next-btn:disabled{ opacity: .55; cursor:not-allowed; transform:none; }
+
+    .watermark{
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 14px;
+      text-align: center;
+      font-size: 12px;
+      color: rgba(0,0,0,.35);
+      letter-spacing: .5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      pointer-events: none;
+    }
+
+    /* Score */
+    .score-sheet{
+      text-align: left;
+      border: 1px dashed rgba(0,0,0,.35);
+      padding: 18px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.65);
+    }
+    .score-sheet h2{
+      font-family: 'Bebas Neue', cursive;
+      font-size: 2.2rem;
+      margin: 0 0 8px 0;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .score-line{
+      color: rgba(0,0,0,.80);
+      font-weight: 800;
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+
+    /* Confetti canvas */
+    #confettiCanvas{
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      display: none;
+    }
+
+    @media (max-width: 390px){
+      .title{ font-size: 2.7rem; }
+      .answer-btn{ font-size: .98rem; }
+    }
+
+    @media (min-width: 820px){
+      .container{ width: min(760px, 100%); padding: 34px 20px 40px; }
+      .title{ font-size: 4.2rem; letter-spacing: 6px; }
+      .quiz-card{ padding: 22px 22px 66px; }
+      .question{ font-size: 1.35rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .answer-btn, .next-btn, .restart-btn, .progress-fill { transition: none !important; }
+    }
+  </style>
 </head>
+
 <body>
-    <h1>Current Date and Time (UTC)</h1>
-    <p>2026-02-11 12:20:39</p>
+  <canvas id="confettiCanvas"></canvas>
+
+  <div class="container">
+    <div class="header">
+      <h1 class="title">Stromberg Quiz</h1>
+      <p class="subtitle">Capitol Versicherung AG • Schadensregulierung M‑Z</p>
+    </div>
+
+    <div class="quiz-card" id="quizCard">
+      <div class="progress-bar" aria-label="Fortschritt">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <div class="top-row">
+        <div class="question-counter" id="questionCounter"></div>
+        <div class="score-mini" id="scoreMini"></div>
+      </div>
+
+      <div class="question" id="question"></div>
+      <div class="answers" id="answers" role="group" aria-label="Antworten"></div>
+
+      <button class="next-btn" id="nextBtn" style="display:none;" type="button" disabled>WEITER</button>
+
+      <div class="watermark">Capitol Versicherung • interner Vorgang</div>
+    </div>
+  </div>
+
+  <script>
+    const QUESTIONS = [
+      { question: "Wie heißt der Vater von Bernd Stromberg?", answers: ["Walter Ferdinand","Heinrich Stromberg","Kurt Stromberg","Manfred Stromberg"], correct: 0 },
+      { question: "Wie hieß der Mitschüler von Stromberg, der bei den Bundesjugendspielen die Weiten gemessen hat?", answers: ["der dicke Winfried","der große Klaus","der kleine Peter","der dünne Manfred"], correct: 0 },
+      { question: "Wie heißt der Schwiegervater von Stromberg?", answers: ["Papa Lorenz","Papa Schmidt","Papa Werner","Papa Müller"], correct: 0 },
+      { question: "Wie heißt Turculu bei eBay?", answers: ["sinan07","turculu99","capitol_man","tk_meister"], correct: 0 },
+      { question: "Welches Schadensvolumen haben die Janus-Werke bei der Capitol?", answers: ["560.000€","450.000€","780.000€","320.000€"], correct: 0 },
+      { question: "Um was für einen Schaden handelt es sich bei dem Fall der Janus-Werke?", answers: ["Wasserschaden in den Werkshallen","Brandschaden in der Produktion","Einbruch im Lager","Sturmschaden am Dach"], correct: 0 },
+      { question: "Welches ist die längste Stromberg Folge?", answers: ["Staffel 3 Folge 3 (Karneval)","Staffel 5 Folge 10 (Finale)","Staffel 2 Folge 8 (Weihnachten)","Staffel 4 Folge 5 (Assessment)"], correct: 0 },
+      { question: "Wie heißt der Nazi-Koch aus der Capitol Kantine?", answers: ["Martin Möllers","Klaus Schneider","Werner Becker","Thomas Krüger"], correct: 0 },
+      { question: "In welchem Jahr wurde Stromberg zuerst ausgestrahlt?", answers: ["2004","2002","2006","2005"], correct: 0 },
+      { question: "Welchen Preis muss Stromberg für die Robbie Williams Tickets überbieten?", answers: ["190€","150€","220€","175€"], correct: 0 },
+      { question: "Wie heißt die schwarze Freundin von Ernie mit vollem Namen?", answers: ["Vanessa Schubert","Jennifer Wagner","Michelle Becker","Sandra Hoffmann"], correct: 0 },
+      { question: "Wie heißt die Kursleiterin?", answers: ["Kerstin Naumann","Petra Schulz","Andrea Weber","Sabine Koch"], correct: 0 },
+      { question: "Wie heißt die Softwarefirma beim Kurs?", answers: ["ATO","SoftTech","DataPro","CompuSys"], correct: 0 },
+      { question: "Wie heißt der Busreiseveranstalter im Stromberg Film?", answers: ["Happy Tours","Sunshine Reisen","Fernbus Deluxe","Meier & Söhne"], correct: 0 },
+      { question: "Wie heißt der Sohn von Schirmchen?", answers: ["Helge","Torben","Kevin","Dennis"], correct: 0 },
+      { question: "Was ist der Spitzname von Helge (Sohn von Schirmchen)?", answers: ["Möppel","Dickerchen","Pummel","Bärchen"], correct: 0 },
+      { question: "Wie ist Ernies Mutter gestorben?", answers: ["durch einen Unfall mit einer Heizdecke (die Ernie ihr geschenkt hat)","an einem Herzinfarkt","bei einem Autounfall","durch einen Sturz von der Treppe"], correct: 0 },
+      { question: "Als welches Gericht bezeichnet Stromberg Lulu?", answers: ["73 süß sauer zum mitnehmen","42 Ente knusprig","88 gebratene Nudeln","55 Gemüse mit Reis"], correct: 0 },
+      { question: "Welche Fachrichtung hat die Tagung von Becker in Den Haag?", answers: ["Steuerrecht","Versicherungsrecht","Arbeitsrecht","Handelsrecht"], correct: 0 },
+      { question: "Wie heißt der HR Berater aus dem Assessment Center von der Bewerbung zur Gesamtleitung Schadensregulierung (erste Staffel)?", answers: ["Herr Trösche","Herr Müller","Herr Schmidt","Herr Wagner"], correct: 0 },
+      { question: "Wie heißt das Parfüm von Tanja in der Folge Theo?", answers: ["True Love","Forever Young","Sweet Dreams","Pure Passion"], correct: 0 },
+      { question: "Wie heißt die Band von Theo?", answers: ["Hypernoise","Soundwave","Electric Echo","Bass Brothers"], correct: 0 },
+      { question: "Welche Musikrichtung spielt Hypernoise?", answers: ["Funk & Reggae","Rock & Pop","Jazz & Blues","Hip-Hop & R&B"], correct: 0 },
+      { question: "Wo steht die übliche Abendgage von Roland Kaiser?", answers: ["Römisch 3.2","Römisch 2.5","Römisch 4.1","Römisch 3.8"], correct: 0 },
+      { question: "Welches Auto fährt Stromberg?", answers: ["Subaru Legacy","Toyota Corolla","VW Passat","Opel Vectra"], correct: 0 }
+    ];
+
+    function shuffleInPlace(arr){
+      for (let i = arr.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // Confetti (>= 80%)
+    const Confetti = (() => {
+      const canvas = document.getElementById("confettiCanvas");
+      const ctx = canvas.getContext("2d");
+      let raf = null;
+      let particles = [];
+      let endAt = 0;
+
+      function resize(){
+        canvas.width = window.innerWidth * devicePixelRatio;
+        canvas.height = window.innerHeight * devicePixelRatio;
+        ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+      }
+      window.addEventListener("resize", resize, { passive: true });
+
+      function spawn(count=180){
+        particles = [];
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        for (let i=0; i<count; i++){ 
+          particles.push({
+            x: Math.random()*w,
+            y: -20 - Math.random()*h*0.25,
+            vx: (Math.random()-0.5)*5,
+            vy: 2 + Math.random()*6,
+            r: 3 + Math.random()*5,
+            rot: Math.random()*Math.PI,
+            vr: (Math.random()-0.5)*0.25,
+            color: Math.random()<0.33 ? "#2c6fa6" : (Math.random()<0.5 ? "#2e8b8b" : "#d40000")
+          });
+        }
+      }
+
+      function start(durationMs=2000){
+        resize();
+        spawn(190);
+        canvas.style.display = "block";
+        endAt = performance.now() + durationMs;
+        tick();
+      }
+
+      function tick(){
+        const now = performance.now();
+        ctx.clearRect(0,0,window.innerWidth, window.innerHeight);
+
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+
+        for (const p of particles){
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vr;
+          p.vy += 0.03;
+          p.vx *= 0.99;
+
+          if (p.x < -40) p.x = w + 40;
+          if (p.x > w + 40) p.x = -40;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = 0.95;
+          ctx.fillRect(-p.r, -p.r/2, p.r*2.2, p.r*1.2);
+          ctx.restore();
+        }
+
+        particles = particles.filter(p => p.y < h + 60);
+
+        if (now < endAt && particles.length > 0) raf = requestAnimationFrame(tick);
+        else stop();
+      }
+
+      function stop(){
+        if (raf) cancelAnimationFrame(raf);
+        raf = null;
+        particles = [];
+        canvas.style.display = "none";
+      }
+
+      return { start, stop };
+    })();
+
+    const state = {
+      idx: 0,
+      score: 0,
+      selectedIdx: null,
+      currentShuffled: [] // {text,isCorrect}
+    };
+
+    const questionEl = document.getElementById("question");
+    const answersEl = document.getElementById("answers");
+    const nextBtn = document.getElementById("nextBtn");
+    const progressFill = document.getElementById("progressFill");
+    const questionCounter = document.getElementById("questionCounter");
+    const scoreMini = document.getElementById("scoreMini");
+
+    function clearSelection(){
+      answersEl.querySelectorAll(".answer-btn").forEach(b => b.classList.remove("selected"));
+    }
+
+    function loadQuestion(){
+      state.selectedIdx = null;
+      nextBtn.style.display = "none";
+      nextBtn.disabled = true;
+
+      const q = QUESTIONS[state.idx];
+      questionEl.textContent = q.question;
+      questionCounter.textContent = `Frage ${state.idx + 1} von ${QUESTIONS.length}`;
+      scoreMini.textContent = `Score: ${state.score}`;
+
+      progressFill.style.width = ((state.idx) / QUESTIONS.length) * 100 + "%";
+
+      const correctText = q.answers[q.correct];
+      state.currentShuffled = q.answers.map(a => ({ text: a, isCorrect: a === correctText }));
+      shuffleInPlace(state.currentShuffled);
+
+      answersEl.innerHTML = "";
+      state.currentShuffled.forEach((a, i) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "answer-btn";
+        btn.textContent = a.text;
+        btn.dataset.index = String(i);
+        answersEl.appendChild(btn);
+      });
+    }
+
+    // Auswahl ist wechselbar: Klick setzt nur selectedIdx
+    function choose(idx){
+      state.selectedIdx = idx;
+      clearSelection();
+      const b = answersEl.querySelector(`.answer-btn[data-index="${idx}"]`);
+      if (b) b.classList.add("selected");
+      nextBtn.style.display = "block";
+      nextBtn.disabled = false;
+    }
+
+    // Wertung erst bei WEITER
+    function confirmAndNext(){
+      if (state.selectedIdx === null) return;
+      const chosen = state.currentShuffled[state.selectedIdx];
+      if (chosen?.isCorrect) state.score += 1;
+
+      state.idx += 1;
+      if (state.idx < QUESTIONS.length) loadQuestion();
+      else showResults();
+    }
+
+    function showResults(){
+      const total = QUESTIONS.length;
+      const percentage = Math.round((state.score / total) * 100);
+
+      progressFill.style.width = "100%";
+      questionEl.textContent = "";
+      questionCounter.textContent = "";
+      scoreMini.textContent = "";
+
+      answersEl.innerHTML = `
+        <div class="score-sheet">
+          <h2>Score</h2>
+          <div class="score-line">Richtige Antworten: <b>${state.score}</b> von <b>${total}</b></div>
+          <div class="score-line">Quote: <b>${percentage}%</b></div>
+          <button class="restart-btn" id="restartBtn" type="button" style="margin-top:14px;">Nochmal spielen</button>
+        </div>
+      `;
+
+      nextBtn.style.display = "none";
+      nextBtn.disabled = true;
+
+      document.getElementById("restartBtn").addEventListener("click", restartQuiz);
+
+      if (percentage >= 80) Confetti.start(2000);
+    }
+
+    function restartQuiz(){
+      Confetti.stop();
+      state.idx = 0;
+      state.score = 0;
+      state.selectedIdx = null;
+      state.currentShuffled = [];
+      loadQuestion();
+    }
+
+    // Events
+    answersEl.addEventListener("click", (e) => {
+      const btn = e.target.closest(".answer-btn");
+      if (!btn) return;
+      choose(Number(btn.dataset.index));
+    });
+
+    nextBtn.addEventListener("click", confirmAndNext);
+
+    // Keyboard: 1-4 wählen, Enter = weiter
+    document.addEventListener("keydown", (e) => {
+      if (e.key >= "1" && e.key <= "4") {
+        const idx = Number(e.key) - 1;
+        if (idx >= 0 && idx < state.currentShuffled.length) choose(idx);
+      }
+      if (e.key === "Enter" && nextBtn.style.display !== "none" && !nextBtn.disabled) confirmAndNext();
+    });
+
+    // Boot
+    loadQuestion();
+  </script>
 </body>
 </html>
