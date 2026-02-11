@@ -1,1 +1,110 @@
-Current Date and Time (UTC - YYYY-MM-DD HH:MM:SS formatted): 2026-02-11 15:49:59
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stromberg Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div id="quiz-container">
+        <h1>Stromberg Quiz</h1>
+        <div id="questions"></div>
+        <div id="navigation-buttons">
+            <button id="back-button" onclick="goBack()">Back</button>
+            <button id="next-button" onclick="nextQuestion()">Next</button>
+        </div>
+        <div id="score" style="display: none;"></div>
+    </div>
+    <div id="confetti" style="display: none;"></div>
+</body>
+</html>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+#quiz-container {
+    margin: auto;
+    width: 80%;
+    max-width: 600px;
+}
+
+button {
+    margin: 10px;
+    padding: 10px;
+}
+</style>
+
+<script>
+const questions = [
+    {question: 'Question 1?', answers: ['Answer 1', 'Answer 2', 'Answer 3', 'Answer 4'], correct: 0},
+    {question: 'Question 2?', answers: ['Answer 1', 'Answer 2', 'Answer 3', 'Answer 4'], correct: 1},
+    // Add 23 more questions here
+];
+
+let currentQuestionIndex = 0;
+let score = 0;
+
+function renderQuestion() {
+    const questionElem = document.getElementById('questions');
+    questionElem.innerHTML = '';
+    const currentQuestion = questions[currentQuestionIndex];
+    questionElem.innerHTML += `<h2>${currentQuestion.question}</h2>`;
+    currentQuestion.answers.forEach((answer, index) => {
+        questionElem.innerHTML += `<button onclick="selectAnswer(${index})">${answer}</button>`;
+    });
+}
+
+function selectAnswer(index) {
+    if (index === questions[currentQuestionIndex].correct) {
+        score++;
+    }
+    nextQuestion();
+}
+
+function nextQuestion() {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < questions.length) {
+        renderQuestion();
+    } else {
+        showScore();
+    }
+}
+
+function goBack() {
+    if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        renderQuestion();
+    }
+}
+
+function showScore() {
+    const scoreElem = document.getElementById('score');
+    scoreElem.style.display = 'block';
+    scoreElem.innerHTML = `Your score: ${score}/${questions.length}`;
+    if (score >= 20) {
+        showConfetti();
+    }
+}
+
+function showConfetti() {
+    const confettiElem = document.getElementById('confetti');
+    confettiElem.style.display = 'block';
+    // Add confetti animation code here
+}
+
+document.addEventListener('keydown', (event) => {
+    if(event.key === 'ArrowUp') {
+        selectAnswer(0);
+    } else if(event.key === 'ArrowDown') {
+        selectAnswer(1);
+    }
+});
+
+renderQuestion();
+</script>
