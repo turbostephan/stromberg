@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team Rotationsplan 2026–2028 – heise Medien</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --heise-blue:#0066a1; --heise-blue-dk:#004f7a; --heise-blue-lt:#e6f0f7; --heise-blue-md:#cce0ed;
+  --text:#1a1a1a; --text-muted:#6b7280; --text-light:#9ca3af;
+  --border:#d1d9e0; --border-light:#e8edf2;
+  --bg:#f5f7fa; --white:#ffffff;
+  --hotline-color:#c0392b; --hotline-bg:#fdf2f2;
+  --mails-color:#0066a1; --mails-bg:#e6f0f7;
+  --om-color:#b7770d; --om-bg:#fef9ec;
+  --listen-color:#1e6b3c; --listen-bg:#edf7f1;
+  --holiday-color:#7c3aed; --holiday-bg:#f5f3ff; --holiday-border:#ddd6fe;
+  --absent-color:#c0392b; --sub-color:#1e6b3c;
+  --warn-bg:#fff8e1; --warn-border:#f59e0b;
+  --r:6px; --sh:0 1px 3px rgba(0,0,0,.08); --shm:0 2px 8px rgba(0,0,0,.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Source Sans 3','Source Sans Pro',sans-serif;font-size:15px;color:var(--text);background:var(--bg);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{background:var(--heise-blue);height:4px}
+
+/* HEADER */
+header{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;box-shadow:var(--sh)}
+.hi{max-width:1340px;margin:0 auto;padding:0 24px;height:50px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px}
+.hbrand{display:flex;align-items:center;gap:10px;justify-self:start}
+.hlogo{width:30px;height:30px;background:var(--heise-blue);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1.1rem;letter-spacing:-1px;flex-shrink:0;text-decoration:none;transition:background .12s}
+.hlogo:hover{background:var(--heise-blue-dk)}
+.hdiv{width:1px;height:22px;background:var(--border)}
+.htitle{font-size:.88rem;font-weight:700;color:var(--text);letter-spacing:.06em;justify-self:center;white-space:nowrap;font-variant:small-caps;text-transform:lowercase}
+.htitle span{color:var(--heise-blue)}
+.hmeta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-self:end}
+.pill{font-size:.75rem;font-weight:700;padding:3px 11px;border-radius:20px;white-space:nowrap}
+.pill-blue{background:var(--heise-blue);color:#fff}
+.pill-lt{background:var(--heise-blue-lt);color:var(--heise-blue);border:1px solid var(--heise-blue-md);font-weight:600}
+.pill-purple{background:var(--holiday-bg);color:var(--holiday-color);border:1px solid var(--holiday-border);font-weight:600}
+
+/* MAIN */
+main{max-width:1340px;margin:0 auto;padding:24px 28px 60px}
+
+/* YEAR TABS – integrated into control bar */
+.ctrl-bar{background:var(--white);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:16px;overflow:hidden}
+.ctrl-top{display:flex;align-items:center;gap:0;border-bottom:1px solid var(--border-light)}
+.ytab{padding:10px 20px;font-size:.88rem;font-weight:600;color:var(--text-muted);cursor:pointer;border:none;background:none;font-family:inherit;border-right:1px solid var(--border-light);transition:all .12s;white-space:nowrap}
+.ytab:hover{color:var(--heise-blue);background:var(--heise-blue-lt)}
+.ytab.active{color:var(--heise-blue);background:var(--heise-blue-lt);font-weight:700}
+.ctrl-nav{display:flex;align-items:center;gap:8px;padding:8px 14px;flex:1;justify-content:space-between}
+.ctrl-info{display:flex;flex-direction:column;gap:1px;align-items:center;flex:1}
+.ctrl-kw{font-size:1rem;font-weight:700;color:var(--text);letter-spacing:-.01em}
+.ctrl-kw span{color:var(--heise-blue)}
+.ctrl-meta{font-size:.75rem;color:var(--text-muted)}
+.ctrl-right{display:flex;align-items:center;gap:6px}
+.nbtn{background:var(--white);border:1px solid var(--border);color:var(--text);width:32px;height:32px;border-radius:var(--r);cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0;font-family:inherit}
+.nbtn:hover{background:var(--heise-blue);border-color:var(--heise-blue);color:#fff}
+.nbtn:disabled{opacity:.35;cursor:not-allowed}
+.today-btn{background:var(--heise-blue-lt);border:1px solid var(--heise-blue-md);color:var(--heise-blue);font-size:.76rem;font-weight:700;padding:0 12px;height:32px;border-radius:var(--r);cursor:pointer;white-space:nowrap;font-family:inherit;transition:all .12s}
+.today-btn:hover{background:var(--heise-blue);color:#fff;border-color:var(--heise-blue)}
+
+/* KW JUMP */
+.kwjump{padding:10px 14px}
+.kwjump-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:6px}
+.kwjump-grid{display:flex;flex-wrap:wrap;gap:3px}
+.kj{width:30px;height:25px;border-radius:4px;border:1px solid var(--border-light);background:var(--bg);font-size:.68rem;font-weight:500;color:var(--text-muted);cursor:pointer;font-family:inherit;transition:all .1s;display:flex;align-items:center;justify-content:center}
+.kj:hover{background:var(--heise-blue-lt);border-color:var(--heise-blue-md);color:var(--heise-blue)}
+.kj.active{background:var(--heise-blue);border-color:var(--heise-blue);color:#fff;font-weight:700}
+.kj.today-kw{border-color:var(--heise-blue);color:var(--heise-blue);font-weight:700}
+.kj.has-holiday{border-color:var(--holiday-border);color:var(--holiday-color)}
+.kj.has-holiday.active{background:var(--heise-blue);color:#fff}
+
+/* ALERT */
+.alert{background:var(--warn-bg);border-left:3px solid var(--warn-border);border-radius:0 var(--r) var(--r) 0;padding:9px 15px;margin-bottom:14px;font-size:.84rem;color:#92400e;display:none}
+.alert.show{display:block}
+
+/* HOLIDAY ALERT */
+.holiday-bar{background:var(--holiday-bg);border-left:3px solid var(--holiday-color);border-radius:0 var(--r) var(--r) 0;padding:9px 15px;margin-bottom:14px;font-size:.84rem;color:var(--holiday-color);display:none}
+.holiday-bar.show{display:flex;align-items:center;gap:8px}
+
+/* INFO CHIPS */
+.ichips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.ichip{display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:500;padding:4px 11px;border-radius:20px;border:1px solid}
+.ichip-rot{background:var(--heise-blue-lt);border-color:var(--heise-blue-md);color:var(--heise-blue)}
+.ichip-hf{background:var(--hotline-bg);border-color:rgba(192,57,43,.25);color:var(--hotline-color)}
+.ichip-hol{background:var(--holiday-bg);border-color:var(--holiday-border);color:var(--holiday-color)}
+.cdot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+
+/* LEGEND */
+.lrow{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+.li{display:flex;align-items:center;gap:5px;font-size:.76rem;color:var(--text-muted)}
+.ldot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* PLAN CARD */
+.pcard{background:var(--white);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:20px;transition:box-shadow .12s}
+.pcard:hover{box-shadow:var(--shm)}
+.pcard-hdr{padding:12px 18px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pcard-hdr h3{font-size:.92rem;font-weight:700;color:var(--text)}
+
+table.pt{width:100%;border-collapse:collapse}
+table.pt th{background:var(--bg);font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);padding:9px 14px;text-align:left;border-bottom:1px solid var(--border-light)}
+table.pt th.dc{text-align:center}
+table.pt td{padding:11px 14px;vertical-align:top;border-bottom:1px solid var(--border-light)}
+table.pt tr:last-child td{border-bottom:none}
+table.pt td.tnc{width:150px;font-size:.78rem;font-weight:700;white-space:nowrap}
+table.pt td.dc{text-align:center}
+
+/* holiday column */
+td.holiday-col{background:rgba(124,58,237,.04);}
+
+.tbadge{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:3px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tb-h{background:var(--hotline-bg);color:var(--hotline-color);border:1px solid rgba(192,57,43,.2)}
+.tb-m{background:var(--mails-bg);color:var(--mails-color);border:1px solid var(--heise-blue-md)}
+.tb-o{background:var(--om-bg);color:var(--om-color);border:1px solid rgba(183,119,13,.25)}
+.tb-l{background:var(--listen-bg);color:var(--listen-color);border:1px solid rgba(30,107,60,.2)}
+
+.ng{display:flex;flex-direction:column;gap:3px;align-items:center}
+.nt{display:inline-flex;align-items:center;gap:3px;font-size:.8rem;font-weight:500;padding:2px 8px;border-radius:3px;white-space:nowrap}
+.nt.n{background:var(--bg);color:var(--text);border:1px solid var(--border-light)}
+.nt.absent{background:var(--hotline-bg);color:#999;border:1px solid rgba(192,57,43,.15);text-decoration:line-through}
+.nt.sub{background:var(--listen-bg);color:var(--sub-color);border:1px solid rgba(30,107,60,.2);font-size:.74rem}
+.nt.sub::before{content:'↗ '}
+.holiday-tag{display:inline-block;font-size:.68rem;font-weight:600;color:var(--holiday-color);background:var(--holiday-bg);border:1px solid var(--holiday-border);border-radius:3px;padding:2px 7px;margin-top:2px}
+
+/* BOTTOM GRID */
+.bgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px}
+.pcrd{background:var(--white);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;transition:box-shadow .12s}
+.pcrd:hover{box-shadow:var(--shm)}
+.pcrd-hdr{padding:12px 18px 11px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between}
+.pcrd-hdr h3{font-size:.92rem;font-weight:700;color:var(--text)}
+.pcrd-body{padding:18px}
+
+/* FORM */
+.fstack{display:flex;flex-direction:column;gap:12px}
+.ff{display:flex;flex-direction:column;gap:4px}
+.fl{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted)}
+select,input[type=date]{background:var(--white);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-family:'Source Sans 3',sans-serif;font-size:.88rem;padding:8px 11px;outline:none;transition:border-color .12s,box-shadow .12s;width:100%;-webkit-appearance:none;cursor:pointer}
+select:focus,input:focus{border-color:var(--heise-blue);box-shadow:0 0 0 3px rgba(0,102,161,.12)}
+.tbns{display:flex;gap:5px}
+.tbtn{flex:1;padding:7px 5px;border-radius:var(--r);border:1px solid var(--border);background:var(--white);color:var(--text-muted);font-family:'Source Sans 3',sans-serif;font-size:.8rem;font-weight:500;cursor:pointer;transition:all .12s}
+.tbtn.active{border-color:var(--heise-blue);background:var(--heise-blue-lt);color:var(--heise-blue);font-weight:700}
+.tbtn:hover:not(.active){border-color:var(--heise-blue-md);background:var(--heise-blue-lt)}
+.drow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btnp{background:var(--heise-blue);color:#fff;border:none;border-radius:var(--r);padding:9px 18px;font-family:'Source Sans 3',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;width:100%;margin-top:3px;transition:background .12s}
+.btnp:hover{background:var(--heise-blue-dk)}
+
+/* ABSENCE LIST */
+.ablist{display:flex;flex-direction:column;gap:7px;max-height:320px;overflow-y:auto}
+.abi{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 12px;background:var(--bg);border-radius:var(--r);border:1px solid var(--border-light)}
+.abileft{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.abtag{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:3px;flex-shrink:0}
+.tag-urlaub{background:var(--heise-blue-lt);color:var(--heise-blue);border:1px solid var(--heise-blue-md)}
+.tag-krank{background:var(--hotline-bg);color:var(--hotline-color);border:1px solid rgba(192,57,43,.2)}
+.tag-sonstig{background:var(--om-bg);color:var(--om-color);border:1px solid rgba(183,119,13,.2)}
+.abn{font-size:.86rem;font-weight:600;color:var(--text)}
+.abd{font-size:.76rem;color:var(--text-muted)}
+.rmbtn{background:none;border:none;color:var(--text-light);cursor:pointer;padding:3px 5px;border-radius:4px;font-size:.82rem;transition:color .1s,background .1s;flex-shrink:0;font-family:inherit;line-height:1}
+.rmbtn:hover{color:var(--hotline-color);background:var(--hotline-bg)}
+.empty-h{text-align:center;padding:22px;color:var(--text-light);font-size:.84rem;font-style:italic}
+
+/* TEAM GRID */
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tcard{background:var(--bg);border:1px solid var(--border-light);border-radius:var(--r);padding:13px;display:flex;gap:11px;align-items:flex-start;transition:border-color .12s}
+.tcard:hover{border-color:var(--heise-blue-md)}
+.tav{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;color:#fff}
+.tinfo{flex:1;min-width:0}
+.tname{font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:2px}
+.ttask{font-size:.73rem;color:var(--text-muted);line-height:1.4}
+.tst{display:inline-flex;align-items:center;gap:3px;font-size:.68rem;font-weight:600;padding:1px 6px;border-radius:3px;margin-top:4px}
+.st-ok{background:var(--listen-bg);color:var(--listen-color);border:1px solid rgba(30,107,60,.2)}
+.st-abs{background:var(--hotline-bg);color:var(--hotline-color);border:1px solid rgba(192,57,43,.2)}
+.st-hf{background:var(--hotline-bg);color:var(--hotline-color);border:1px solid rgba(192,57,43,.2)}
+
+/* HOLIDAY LIST */
+.hollist{display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto}
+.holitem{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--holiday-bg);border:1px solid var(--holiday-border);border-radius:var(--r)}
+.hol-date{font-size:.78rem;font-weight:700;color:var(--holiday-color);min-width:64px;flex-shrink:0}
+.hol-name{font-size:.82rem;color:var(--text);flex:1}
+.hol-kw{font-size:.72rem;color:var(--text-muted);white-space:nowrap}
+.hol-wd{font-size:.72rem;font-weight:600;color:var(--holiday-color);min-width:26px;text-align:center;flex-shrink:0}
+
+footer{border-top:1px solid var(--border);background:var(--white);padding:14px 28px;text-align:center;font-size:.76rem;color:var(--text-light)}
+footer strong{color:var(--heise-blue)}
+
+@media(max-width:960px){main,header .hi,footer{padding-left:14px;padding-right:14px}.bgrid{grid-template-columns:1fr}.tgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.tgrid{grid-template-columns:1fr 1fr}.kj{width:26px;font-size:.64rem}}
+</style>
+</head>
+<body>
+<div class="topbar"></div>
+
+<header>
+  <div class="hi">
+    <div class="hbrand"></div>
+    <div class="htitle">Performance Team &nbsp;<span>Rotationsplan</span></div>
+    <div class="hmeta">
+      <div class="pill pill-lt" id="headerYear">2026</div>
+      <div class="pill pill-blue" id="headerKW">KW –</div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- COMBINED CONTROL BAR -->
+<div class="ctrl-bar">
+  <div class="ctrl-top">
+    <button class="ytab active" onclick="setYear(2026,this)">2026</button>
+    <button class="ytab" onclick="setYear(2027,this)">2027</button>
+    <button class="ytab" onclick="setYear(2028,this)">2028</button>
+    <div class="ctrl-nav">
+      <button class="nbtn" onclick="changeWeek(-1)" title="Vorherige Woche">‹</button>
+      <div class="ctrl-info">
+        <div class="ctrl-kw" id="wtMain">–</div>
+        <div class="ctrl-meta" id="wtSub">–</div>
+      </div>
+      <button class="nbtn" onclick="changeWeek(1)" title="Nächste Woche">›</button>
+      <button class="today-btn" onclick="goToToday()">Heute</button>
+    </div>
+  </div>
+  <div class="kwjump">
+    <div class="kwjump-label">KW-Übersicht <span id="kwjumpYear">2026</span> &nbsp;<span style="color:var(--holiday-color)">● Feiertag</span></div>
+    <div class="kwjump-grid" id="kwJumpGrid"></div>
+  </div>
+</div>
+
+<!-- ALERTS -->
+<div class="alert" id="alertBanner"></div>
+<div class="holiday-bar" id="holidayBar">
+  <span>🎉</span><span id="holidayBarText"></span>
+</div>
+
+<!-- INFO CHIPS -->
+<div class="ichips">
+<div class="ichip ichip-hf" id="hfChip"><span class="cdot"></span><span>– hotlinefrei</span></div>
+  <div class="ichip ichip-hol" id="holChip" style="display:none"><span>🎉</span><span id="holChipTxt"></span></div>
+</div>
+
+<!-- LEGEND -->
+<div class="lrow">
+  <div class="li"><div class="ldot" style="background:var(--hotline-color)"></div>Hotline</div>
+  <div class="li"><div class="ldot" style="background:var(--mails-color)"></div>Mails</div>
+  <div class="li"><div class="ldot" style="background:var(--om-color)"></div>OM</div>
+  <div class="li"><div class="ldot" style="background:var(--listen-color)"></div>Listen & Springer</div>
+<div class="li"><div class="ldot" style="background:var(--holiday-color)"></div><span style="color:var(--holiday-color)">Feiertag (NI)</span></div>
+</div>
+
+<!-- PLAN TABLE -->
+<div class="pcard">
+  <div class="pcard-hdr"><h3>Tagesübersicht Aufgabenverteilung</h3><span id="planCardMeta" style="font-size:.78rem;color:var(--text-muted)"></span></div>
+  <div style="overflow-x:auto">
+    <table class="pt" id="planTable">
+      <thead>
+        <tr>
+          <th style="width:150px">Aufgabe</th>
+          <th class="dc" id="th0">Mo</th>
+          <th class="dc" id="th1">Di</th>
+          <th class="dc" id="th2">Mi</th>
+          <th class="dc" id="th3">Do</th>
+          <th class="dc" id="th4">Fr</th>
+        </tr>
+      </thead>
+      <tbody id="planBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- BOTTOM PANELS -->
+<div class="bgrid">
+  <!-- FORM -->
+  <div class="pcrd">
+    <div class="pcrd-hdr"><h3>Abwesenheit eintragen</h3></div>
+    <div class="pcrd-body">
+      <div class="fstack">
+        <div class="ff">
+          <label class="fl">Mitarbeiterin</label>
+          <select id="absMember">
+            <option value="">Bitte wählen …</option>
+            <option>Nina</option><option>Edelline</option><option>Bea</option>
+            <option>Seouar</option><option>Rike</option><option>Lena</option>
+          </select>
+        </div>
+        <div class="ff">
+          <label class="fl">Art der Abwesenheit</label>
+          <div class="tbns">
+            <button class="tbtn active" onclick="setType(this,'Urlaub')">🏖 Urlaub</button>
+            <button class="tbtn" onclick="setType(this,'Krank')">🤒 Krank</button>
+            <button class="tbtn" onclick="setType(this,'Sonstig')">📋 Sonstig</button>
+          </div>
+          <input type="hidden" id="absType" value="Urlaub">
+        </div>
+        <div class="ff">
+          <label class="fl">Zeitraum</label>
+          <div class="drow">
+            <div class="ff"><label class="fl" style="font-size:.66rem">Von</label><input type="date" id="absFrom"></div>
+            <div class="ff"><label class="fl" style="font-size:.66rem">Bis</label><input type="date" id="absTo"></div>
+          </div>
+        </div>
+        <button class="btnp" onclick="addAbsence()">Speichern &amp; Plan aktualisieren</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABSENCE LIST -->
+  <div class="pcrd">
+    <div class="pcrd-hdr"><h3>Eingetragene Abwesenheiten</h3><span id="absCount" style="font-size:.78rem;color:var(--text-muted)"></span></div>
+    <div class="pcrd-body">
+      <div class="ablist" id="absenceList"><div class="empty-h">Noch keine Abwesenheiten eingetragen.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TEAM STATUS + HOLIDAY LIST -->
+<div class="bgrid">
+  <div class="pcrd">
+    <div class="pcrd-hdr"><h3>Team-Status dieser Woche</h3><span id="teamMeta" style="font-size:.78rem;color:var(--text-muted)"></span></div>
+    <div class="pcrd-body">
+      <div class="tgrid" id="teamGrid"></div>
+    </div>
+  </div>
+
+  <div class="pcrd">
+    <div class="pcrd-hdr"><h3>Feiertage Niedersachsen <span id="holYear" style="color:var(--holiday-color)">2026</span></h3></div>
+    <div class="pcrd-body">
+      <div class="hollist" id="holList"></div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <strong>heise Medien GmbH &amp; Co. KG</strong> · Karl-Wiechert-Allee 10, 30625 Hannover ·
+  Rotationsplan Performance Team 2026–2028 · Internes Planungstool
+</footer>
+
+<script>
+// ══ FEIERTAGE NIEDERSACHSEN ══════════════════════════════════════════════════
+// Alle 10 gesetzlichen Feiertage: Neujahr, Karfreitag, Ostermontag,
+// Tag der Arbeit, Christi Himmelfahrt, Pfingstmontag, Tag der Deutschen Einheit,
+// Reformationstag, 1. + 2. Weihnachtsfeiertag
+const HOLIDAYS = {
+  2026: [
+    {date:'2026-01-01', name:'Neujahr',                    wd:'Do'},
+    {date:'2026-04-03', name:'Karfreitag',                 wd:'Fr'},
+    {date:'2026-04-06', name:'Ostermontag',                wd:'Mo'},
+    {date:'2026-05-01', name:'Tag der Arbeit',             wd:'Fr'},
+    {date:'2026-05-14', name:'Christi Himmelfahrt',        wd:'Do'},
+    {date:'2026-05-25', name:'Pfingstmontag',              wd:'Mo'},
+    {date:'2026-10-03', name:'Tag der Deutschen Einheit',  wd:'Sa'},
+    {date:'2026-10-31', name:'Reformationstag',            wd:'Sa'},
+    {date:'2026-12-25', name:'1. Weihnachtsfeiertag',      wd:'Fr'},
+    {date:'2026-12-26', name:'2. Weihnachtsfeiertag',      wd:'Sa'},
+  ],
+  2027: [
+    {date:'2027-01-01', name:'Neujahr',                    wd:'Fr'},
+    {date:'2027-03-26', name:'Karfreitag',                 wd:'Fr'},
+    {date:'2027-03-29', name:'Ostermontag',                wd:'Mo'},
+    {date:'2027-05-01', name:'Tag der Arbeit',             wd:'Sa'},
+    {date:'2027-05-06', name:'Christi Himmelfahrt',        wd:'Do'},
+    {date:'2027-05-17', name:'Pfingstmontag',              wd:'Mo'},
+    {date:'2027-10-03', name:'Tag der Deutschen Einheit',  wd:'So'},
+    {date:'2027-10-31', name:'Reformationstag',            wd:'So'},
+    {date:'2027-12-25', name:'1. Weihnachtsfeiertag',      wd:'Sa'},
+    {date:'2027-12-26', name:'2. Weihnachtsfeiertag',      wd:'So'},
+  ],
+  2028: [
+    {date:'2028-01-01', name:'Neujahr',                    wd:'Sa'},
+    {date:'2028-04-14', name:'Karfreitag',                 wd:'Fr'},
+    {date:'2028-04-17', name:'Ostermontag',                wd:'Mo'},
+    {date:'2028-05-01', name:'Tag der Arbeit',             wd:'Mo'},
+    {date:'2028-05-25', name:'Christi Himmelfahrt',        wd:'Do'},
+    {date:'2028-06-05', name:'Pfingstmontag',              wd:'Mo'},
+    {date:'2028-10-03', name:'Tag der Deutschen Einheit',  wd:'Di'},
+    {date:'2028-10-31', name:'Reformationstag',            wd:'Di'},
+    {date:'2028-12-25', name:'1. Weihnachtsfeiertag',      wd:'Mo'},
+    {date:'2028-12-26', name:'2. Weihnachtsfeiertag',      wd:'Di'},
+  ]
+};
+
+// Build Set for fast lookup: only workday holidays (Mo-Fr)
+function buildHolidaySet(year) {
+  const s = new Set();
+  const WORKDAYS = ['Mo','Di','Mi','Do','Fr'];
+  (HOLIDAYS[year] || []).forEach(h => {
+    if (WORKDAYS.includes(h.wd)) s.add(h.date);
+  });
+  return s;
+}
+
+// ══ ROTATION DATA ════════════════════════════════════════════════════════════
+const MEMBERS = ['Nina','Edelline','Bea','Seouar','Rike','Lena'];
+const DAYS_DE  = ['Mo','Di','Mi','Do','Fr'];
+const VERTRETUNG = {Lena:'Bea', Nina:'Anni', Rike:'(abwechselnd)'};
+const AVATAR_COLORS = {Nina:'#0066a1',Edelline:'#8b5cf6',Bea:'#0891b2',Seouar:'#b7770d',Rike:'#1e6b3c',Lena:'#c0392b'};
+const TASK_BADGE = {Hotline:'tb-h',Mails:'tb-m',OM:'tb-o',Listen:'tb-l'};
+const TASK_LABEL = {Hotline:'Hotline',Mails:'Mails',OM:'OM',Listen:'Listen & Springer'};
+
+// 6-week rotation template (unchanged from source)
+const ROTATION = {
+  1:{hotlinefrei:'Lena',tasks:{
+    Hotline:[['Nina','Edelline'],['Bea','Seouar'],['Rike','Bea'],['Rike','Edelline'],['Seouar','Nina']],
+    Mails:  [['Nina','Seouar'],['Nina','Seouar'],['Nina','Seouar'],['Nina','Seouar'],['Nina','Seouar']],
+    OM:     [['Edelline','Bea'],['Edelline','Bea'],['Edelline','Bea'],['Edelline','Bea'],['Edelline','Bea']],
+    Listen: [['Lena','Rike'],['Lena','Rike'],['Lena','Rike'],['Lena','Rike'],['Lena','Rike']]}},
+  2:{hotlinefrei:'Rike',tasks:{
+    Hotline:[['Lena','Bea'],['Seouar','Nina'],['Bea','Edelline'],['Nina','Edelline'],['Seouar','Lena']],
+    Mails:  [['Lena','Seouar'],['Lena','Seouar'],['Lena','Seouar'],['Lena','Seouar'],['Lena','Seouar']],
+    OM:     [['Nina','Bea'],['Nina','Bea'],['Nina','Bea'],['Nina','Bea'],['Nina','Bea']],
+    Listen: [['Rike','Edelline'],['Rike','Edelline'],['Rike','Edelline'],['Rike','Edelline'],['Rike','Edelline']]}},
+  3:{hotlinefrei:'Nina',tasks:{
+    Hotline:[['Bea','Edelline'],['Rike','Lena'],['Bea','Rike'],['Seouar','Edelline'],['Seouar','Lena']],
+    Mails:  [['Lena','Edelline'],['Lena','Edelline'],['Lena','Edelline'],['Lena','Edelline'],['Lena','Edelline']],
+    OM:     [['Bea','Seouar'],['Bea','Seouar'],['Bea','Seouar'],['Bea','Seouar'],['Bea','Seouar']],
+    Listen: [['Rike','Nina'],['Rike','Nina'],['Rike','Nina'],['Rike','Nina'],['Rike','Nina']]}},
+  4:{hotlinefrei:'Bea',tasks:{
+    Hotline:[['Lena','Seouar'],['Nina','Rike'],['Edelline','Lena'],['Rike','Seouar'],['Edelline','Nina']],
+    Mails:  [['Lena','Seouar'],['Lena','Seouar'],['Lena','Seouar'],['Lena','Seouar'],['Lena','Seouar']],
+    OM:     [['Nina','Edelline'],['Nina','Edelline'],['Nina','Edelline'],['Nina','Edelline'],['Nina','Edelline']],
+    Listen: [['Bea','Rike'],['Bea','Rike'],['Bea','Rike'],['Bea','Rike'],['Bea','Rike']]}},
+  5:{hotlinefrei:'Edelline',tasks:{
+    Hotline:[['Nina','Bea'],['Seouar','Rike'],['Lena','Rike'],['Nina','Seouar'],['Bea','Lena']],
+    Mails:  [['Bea','Nina'],['Bea','Nina'],['Bea','Nina'],['Bea','Nina'],['Bea','Nina']],
+    OM:     [['Lena','Seouar'],['Lena','Seouar'],['Lena','Seouar'],['Lena','Seouar'],['Lena','Seouar']],
+    Listen: [['Edelline','Rike'],['Edelline','Rike'],['Edelline','Rike'],['Edelline','Rike'],['Edelline','Rike']]}},
+  6:{hotlinefrei:'Seouar',tasks:{
+    Hotline:[['Lena','Bea'],['Rike','Nina'],['Rike','Edelline'],['Bea','Lena'],['Nina','Edelline']],
+    Mails:  [['Edelline','Bea'],['Edelline','Bea'],['Edelline','Bea'],['Edelline','Bea'],['Edelline','Bea']],
+    OM:     [['Lena','Nina'],['Lena','Nina'],['Lena','Nina'],['Lena','Nina'],['Lena','Nina']],
+    Listen: [['Seouar','Rike'],['Seouar','Rike'],['Seouar','Rike'],['Seouar','Rike'],['Seouar','Rike']]}}
+};
+
+// ══ STATE ════════════════════════════════════════════════════════════════════
+let absences = [];
+try { absences = JSON.parse(localStorage.getItem('heise_abs_2628') || '[]'); } catch(e){}
+let currentYear = 2026;
+let currentKW   = getTodayKW();
+// Clamp to year boundaries on load
+const todayKWYear = new Date().getFullYear();
+if (todayKWYear < 2026 || todayKWYear > 2028) currentYear = 2026;
+else currentYear = todayKWYear;
+
+// ══ HELPERS ══════════════════════════════════════════════════════════════════
+function getTodayKW()  { return getKWForDate(new Date()); }
+function getTodayYear(){ return new Date().getFullYear(); }
+
+function getKWForDate(date) {
+  const d = new Date(Date.UTC(date.getFullYear(),date.getMonth(),date.getDate()));
+  const dow = d.getUTCDay()||7;
+  d.setUTCDate(d.getUTCDate()+4-dow);
+  const ys = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+  return Math.ceil((((d-ys)/86400000)+1)/7);
+}
+
+function getMaxKW(year) {
+  const dec28 = new Date(Date.UTC(year,11,28));
+  return getKWForDate(dec28);
+}
+
+function getWeekDates(kw, year) {
+  const jan4 = new Date(Date.UTC(year,0,4));
+  const jan4day = jan4.getUTCDay()||7;
+  const mon = new Date(jan4);
+  mon.setUTCDate(jan4.getUTCDate()-jan4day+1+(kw-1)*7);
+  const days = [];
+  for(let i=0;i<5;i++){const d=new Date(mon);d.setUTCDate(mon.getUTCDate()+i);days.push(d);}
+  return days;
+}
+
+function ds(d){ return d.toISOString().split('T')[0]; }
+function fmt(d){ return d.toLocaleDateString('de-DE',{timeZone:'UTC',day:'2-digit',month:'2-digit'}); }
+function fmtFull(d){ return d.toLocaleDateString('de-DE',{timeZone:'UTC',day:'2-digit',month:'2-digit',year:'numeric'}); }
+function todayStr(){ return new Date().toISOString().split('T')[0]; }
+
+function kwToRot(kw){ return ((kw-1)%6)+1; }
+
+function isAbsent(name, date) {
+  const ts = date.getTime();
+  return absences.some(a => {
+    if(a.member!==name) return false;
+    const f=new Date(a.from+'T00:00:00Z').getTime();
+    const t=new Date(a.to+'T00:00:00Z').getTime();
+    return ts>=f && ts<=t;
+  });
+}
+
+function getHolidayName(dateStr, year) {
+  const h = (HOLIDAYS[year]||[]).find(h=>h.date===dateStr);
+  return h ? h.name : null;
+}
+
+function kwHasWorkdayHoliday(kw, year) {
+  const hset = buildHolidaySet(year);
+  const dates = getWeekDates(kw, year);
+  return dates.some(d => hset.has(ds(d)));
+}
+
+// ══ BUILD JUMPBAR ════════════════════════════════════════════════════════════
+function buildJumpBar() {
+  const grid = document.getElementById('kwJumpGrid');
+  grid.innerHTML = '';
+  const maxKW = getMaxKW(currentYear);
+  const todayKW = getTodayKW();
+  const todayY  = getTodayYear();
+  for(let kw=1; kw<=maxKW; kw++) {
+    const btn = document.createElement('button');
+    const isActive   = kw===currentKW;
+    const isToday    = kw===todayKW && currentYear===todayY;
+    const hasHol     = kwHasWorkdayHoliday(kw, currentYear);
+    btn.className = 'kj'+(isActive?' active':'')+(isToday&&!isActive?' today-kw':'')+(hasHol&&!isActive?' has-holiday':'');
+    btn.textContent = kw;
+    btn.id = `kj-${kw}`;
+    btn.title = `KW ${kw}${hasHol?' · Feiertag':''}`;
+    btn.onclick = () => { currentKW=kw; render(); };
+    grid.appendChild(btn);
+  }
+  document.getElementById('kwjumpYear').textContent = currentYear;
+}
+
+function updateJumpBar() {
+  const maxKW   = getMaxKW(currentYear);
+  const todayKW = getTodayKW();
+  const todayY  = getTodayYear();
+  for(let kw=1; kw<=maxKW; kw++) {
+    const btn = document.getElementById(`kj-${kw}`);
+    if(!btn) continue;
+    const isActive = kw===currentKW;
+    const isToday  = kw===todayKW && currentYear===todayY;
+    const hasHol   = kwHasWorkdayHoliday(kw, currentYear);
+    btn.className = 'kj'+(isActive?' active':'')+(isToday&&!isActive?' today-kw':'')+(hasHol&&!isActive?' has-holiday':'');
+  }
+}
+
+// ══ HOLIDAY LIST ════════════════════════════════════════════════════════════
+function renderHolidayList() {
+  const list = document.getElementById('holList');
+  const year = currentYear;
+  list.innerHTML = '';
+  document.getElementById('holYear').textContent = year;
+  const WD_LABELS = {Mo:'Mo',Di:'Di',Mi:'Mi',Do:'Do',Fr:'Fr',Sa:'Sa',So:'So'};
+  const WORKDAYS = ['Mo','Di','Mi','Do','Fr'];
+  (HOLIDAYS[year]||[]).forEach(h => {
+    const isWd = WORKDAYS.includes(h.wd);
+    const el = document.createElement('div');
+    el.className = 'holitem';
+    if(!isWd) el.style.opacity = '0.55';
+    const d = new Date(h.date+'T00:00:00Z');
+    el.innerHTML = `
+      <span class="hol-date">${fmt(d)}</span>
+      <span class="hol-wd" style="color:${isWd?'var(--holiday-color)':'var(--text-muted)'}">${h.wd}</span>
+      <span class="hol-name">${h.name}${!isWd?' <span style="font-size:.68rem;color:var(--text-muted)">(WE)</span>':''}</span>
+      <span class="hol-kw">KW ${getKWForDate(d)}</span>`;
+    list.appendChild(el);
+  });
+}
+
+// ══ MAIN RENDER ════════════════════════════════════════════════════════════
+function render() {
+  const rot   = kwToRot(currentKW);
+  const week  = ROTATION[rot];
+  const dates = getWeekDates(currentKW, currentYear);
+  const hset  = buildHolidaySet(currentYear);
+  const todayKW = getTodayKW();
+  const todayY  = getTodayYear();
+
+  // Header pills
+  document.getElementById('headerYear').textContent = currentYear;
+  document.getElementById('headerKW').textContent   = `KW ${currentKW}`;
+
+  // Week nav
+  const isCurrentWeek = currentKW===todayKW && currentYear===todayY;
+  document.getElementById('wtMain').innerHTML =
+    `<span>KW ${currentKW}</span> &nbsp;·&nbsp; ${fmt(dates[0])} – ${fmt(dates[4])}${isCurrentWeek ? ' &nbsp;<span style="font-size:.72rem;font-weight:600;color:var(--listen-color);background:var(--listen-bg);border:1px solid rgba(30,107,60,.2);border-radius:3px;padding:1px 7px;vertical-align:middle">Aktuelle Woche</span>' : ''}`;
+  document.getElementById('wtSub').textContent = '';
+  // Info chips
+document.getElementById('hfChip').querySelector('span:last-child').textContent = `${week.hotlinefrei} hotlinefrei`;
+
+  // Holidays this week
+  const weekHolidays = dates
+    .map(d => ({ d, name: getHolidayName(ds(d), currentYear), isWorkday: hset.has(ds(d)) }))
+    .filter(x => x.name);
+  const workdayHolidays = weekHolidays.filter(x => x.isWorkday);
+  const holChip = document.getElementById('holChip');
+  if(workdayHolidays.length) {
+    holChip.style.display = 'inline-flex';
+    document.getElementById('holChipTxt').textContent =
+      workdayHolidays.map(x => x.name).join(', ') + ' (arbeitsfrei)';
+  } else {
+    holChip.style.display = 'none';
+  }
+
+  // Holiday bar
+  const hbar = document.getElementById('holidayBar');
+  if(workdayHolidays.length) {
+    hbar.classList.add('show');
+    document.getElementById('holidayBarText').textContent =
+      `Feiertag${workdayHolidays.length>1?'e':''} diese Woche (Niedersachsen): ${workdayHolidays.map(x=>x.name+' ('+fmt(x.d)+', '+DAYS_DE[dates.indexOf(x.d)]+')').join(' · ')}`;
+  } else {
+    hbar.classList.remove('show');
+  }
+
+  // Absence alert
+  const absentNames = MEMBERS.filter(m => dates.some(d => isAbsent(m,d)));
+  const alertEl = document.getElementById('alertBanner');
+  if(absentNames.length) {
+    alertEl.textContent = `⚠ Abwesenheiten diese Woche: ${absentNames.join(', ')} – Vertretungslogik ist aktiv.`;
+    alertEl.classList.add('show');
+  } else {
+    alertEl.classList.remove('show');
+  }
+
+  // Day column headers
+  dates.forEach((d,i) => {
+    const isToday  = ds(d)===todayStr();
+    const holName  = getHolidayName(ds(d), currentYear);
+    const isWdHol  = hset.has(ds(d));
+    let html = `${DAYS_DE[i]}<br><span style="font-size:.68rem;font-weight:400;text-transform:none;letter-spacing:0">${fmt(d)}</span>`;
+    if(isToday) html += `<br><span style="color:var(--heise-blue);font-size:.62rem">● heute</span>`;
+    if(holName && isWdHol) html += `<br><span style="color:var(--holiday-color);font-size:.6rem;font-weight:600">🎉 Feiertag</span>`;
+    document.getElementById(`th${i}`).innerHTML = html;
+  });
+
+  // Plan table
+  const body = document.getElementById('planBody');
+  body.innerHTML = '';
+  Object.entries(week.tasks).forEach(([task, dayAssign]) => {
+    const tr = document.createElement('tr');
+    const tdN = document.createElement('td');
+    tdN.className = 'tnc';
+    tdN.innerHTML = `<span class="tbadge ${TASK_BADGE[task]}">${TASK_LABEL[task]||task}</span>`;
+    tr.appendChild(tdN);
+
+    dayAssign.forEach((names, di) => {
+      const td   = document.createElement('td');
+      td.className = 'dc';
+      const date = dates[di];
+      const isToday = ds(date)===todayStr();
+      const isHol   = hset.has(ds(date));
+      const holName = getHolidayName(ds(date), currentYear);
+
+      if(isToday) td.style.background = 'var(--heise-blue-lt)';
+      else if(isHol) td.classList.add('holiday-col');
+
+      const wrap = document.createElement('div');
+      wrap.className = 'ng';
+
+      if(isHol) {
+        // On public holidays: all are technically off; show with feiertag note
+        const htag = document.createElement('span');
+        htag.className = 'holiday-tag';
+        htag.textContent = 'Feiertag';
+        wrap.appendChild(htag);
+        const sub = document.createElement('span');
+        sub.style.cssText = 'font-size:.68rem;color:var(--text-light);margin-top:1px';
+        sub.textContent = holName;
+        wrap.appendChild(sub);
+      } else {
+        names.forEach(name => {
+          const absent = isAbsent(name, date);
+          const chip = document.createElement('span');
+          chip.className = `nt ${absent?'absent':'n'}`;
+          chip.textContent = name;
+          wrap.appendChild(chip);
+          if(absent && VERTRETUNG[name]) {
+            const sub = document.createElement('span');
+            sub.className = 'nt sub';
+            sub.textContent = VERTRETUNG[name];
+            wrap.appendChild(sub);
+          }
+        });
+      }
+
+      td.appendChild(wrap);
+      tr.appendChild(td);
+    });
+    body.appendChild(tr);
+  });
+
+  // Plan card meta
+  const workdays = dates.filter(d => !hset.has(ds(d))).length;
+  document.getElementById('planCardMeta').textContent =
+    `${workdays} Arbeitstag${workdays!==1?'e':''} · ${5-workdays} Feiertag${5-workdays!==1?'e':''}`;
+
+  updateJumpBar();
+  renderTeamGrid(week, dates, hset);
+  renderAbsenceList();
+  renderHolidayList();
+}
+
+function renderTeamGrid(week, dates, hset) {
+  const grid = document.getElementById('teamGrid');
+  grid.innerHTML = '';
+  MEMBERS.forEach(name => {
+    const absDays  = dates.filter(d => isAbsent(name,d) && !hset.has(ds(d))).length;
+    const holDays  = dates.filter(d => hset.has(ds(d))).length;
+    const isHFrei  = week.hotlinefrei===name;
+    const myTasks  = Object.entries(week.tasks).filter(([,d])=>d.some(x=>x.includes(name))).map(([t])=>t);
+
+    const card = document.createElement('div');
+    card.className = 'tcard';
+
+    const av = document.createElement('div');
+    av.className = 'tav';
+    av.style.background = AVATAR_COLORS[name]||'#0066a1';
+    av.textContent = name[0];
+    card.appendChild(av);
+
+    const info = document.createElement('div');
+    info.className = 'tinfo';
+    const nm = document.createElement('div'); nm.className='tname'; nm.textContent=name;
+    info.appendChild(nm);
+    const tk = document.createElement('div'); tk.className='ttask';
+    if(absDays>0){ tk.style.color='var(--hotline-color)'; tk.textContent=`Abwesend (${absDays} Tag${absDays>1?'e':''})`;
+    } else if(holDays>0 && myTasks.length){ tk.textContent=myTasks.join(', ')+` · ${holDays} Ft.`;
+    } else { tk.textContent=myTasks.join(', ')||'–'; }
+    info.appendChild(tk);
+
+    const st = document.createElement('div');
+    if(absDays>0){ st.className='tst st-abs'; st.textContent='Abwesend';}
+    else if(isHFrei){ st.className='tst st-hf'; st.textContent='Hotlinefrei';}
+    else { st.className='tst st-ok'; st.textContent='Verfügbar'; }
+    info.appendChild(st);
+    card.appendChild(info);
+    grid.appendChild(card);
+  });
+  const avail = MEMBERS.filter(m=>!dates.some(d=>isAbsent(m,d))).length;
+  document.getElementById('teamMeta').textContent=`${avail}/${MEMBERS.length} verfügbar`;
+}
+
+function renderAbsenceList() {
+  const list=document.getElementById('absenceList');
+  const cnt=document.getElementById('absCount');
+  if(!absences.length){list.innerHTML='<div class="empty-h">Noch keine Abwesenheiten eingetragen.</div>';cnt.textContent='';return;}
+  cnt.textContent=`${absences.length} Eintr.`;
+  list.innerHTML='';
+  [...absences].sort((a,b)=>new Date(a.from)-new Date(b.from)).forEach((a,i)=>{
+    const el=document.createElement('div'); el.className='abi';
+    const f=new Date(a.from+'T00:00:00Z').toLocaleDateString('de-DE',{timeZone:'UTC',day:'2-digit',month:'2-digit',year:'2-digit'});
+    const t=new Date(a.to+'T00:00:00Z').toLocaleDateString('de-DE',{timeZone:'UTC',day:'2-digit',month:'2-digit',year:'2-digit'});
+    const tc=`tag-${a.type.toLowerCase()}`;
+    el.innerHTML=`<div class="abileft"><span class="abtag ${tc}">${a.type}</span><span class="abn">${a.member}</span><span class="abd">${a.from===a.to?f:f+' – '+t}</span></div><button class="rmbtn" onclick="removeAbsence(${i})" title="Entfernen">✕</button>`;
+    list.appendChild(el);
+  });
+}
+
+// ══ CONTROLS ════════════════════════════════════════════════════════════════
+function setYear(year, btn) {
+  currentYear = year;
+  document.querySelectorAll('.ytab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const maxKW = getMaxKW(year);
+  if(currentKW > maxKW) currentKW = maxKW;
+  buildJumpBar();
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function changeWeek(delta) {
+  const maxKW = getMaxKW(currentYear);
+  currentKW = Math.max(1, Math.min(maxKW, currentKW+delta));
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function goToToday() {
+  const y = getTodayYear();
+  if(y>=2026 && y<=2028){
+    currentYear=y;
+    document.querySelectorAll('.ytab').forEach((b,i)=>{b.classList.toggle('active',[2026,2027,2028][i]===y)});
+  }
+  currentKW = getTodayKW();
+  buildJumpBar();
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function setType(btn, type) {
+  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('absType').value=type;
+}
+
+function addAbsence() {
+  const member=document.getElementById('absMember').value;
+  const type=document.getElementById('absType').value;
+  const from=document.getElementById('absFrom').value;
+  const to=document.getElementById('absTo').value||from;
+  if(!member||!from){alert('Bitte Mitarbeiterin und Startdatum auswählen.');return;}
+  if(to<from){alert('Enddatum muss nach Startdatum liegen.');return;}
+  absences.push({member,type,from,to});
+  try{localStorage.setItem('heise_abs_2628',JSON.stringify(absences));}catch(e){}
+  document.getElementById('absMember').value='';
+  document.getElementById('absFrom').value=todayStr();
+  document.getElementById('absTo').value=todayStr();
+  render();
+}
+
+function removeAbsence(i) {
+  absences.splice(i,1);
+  try{localStorage.setItem('heise_abs_2628',JSON.stringify(absences));}catch(e){}
+  render();
+}
+
+// ══ INIT ════════════════════════════════════════════════════════════════════
+document.getElementById('absFrom').value=todayStr();
+document.getElementById('absTo').value=todayStr();
+
+// Set active year tab
+const initYear = (new Date().getFullYear()>=2026 && new Date().getFullYear()<=2028) ? new Date().getFullYear() : 2026;
+currentYear = initYear;
+document.querySelectorAll('.ytab').forEach((b,i)=>{b.classList.toggle('active',[2026,2027,2028][i]===currentYear)});
+
+// Set correct starting KW for the year
+if(initYear === new Date().getFullYear()) currentKW = getTodayKW();
+else currentKW = 1;
+
+buildJumpBar();
+render();
+</script>
+</body>
+</html>
